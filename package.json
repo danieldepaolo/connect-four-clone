@@ -7,7 +7,8 @@
   "scripts": {
     "start": "parcel",
     "build": "parcel build src/index.html --public-url ./",
-    "deploy": "gh-pages -d dist/"
+    "gh-deploy": "gh-pages -d dist/",
+    "deploy": "npm-run-all build gh-deploy"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -17,6 +18,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "gh-pages": "^6.3.0",
+    "npm-run-all": "^4.1.5",
     "parcel": "^2.14.0"
   }
 }
