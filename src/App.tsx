@@ -74,8 +74,11 @@ export function App() {
       <h2 className={`game-message${winner ? " game-message__winner" : ""}`}>
         {message()}
       </h2>
-      <button className="reset-button" onClick={resetGame}>
-        Reset
+      <button
+        className={`reset-button${outcome ? " reset-button__new-game" : ""}`}
+        onClick={resetGame}
+      >
+        {outcome ? "New Game" : "Reset"}
       </button>
     </div>
   );
