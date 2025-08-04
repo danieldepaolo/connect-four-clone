@@ -16163,7 +16163,7 @@ function App() {
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
                 className: "heading-primary",
-                children: "Connect Four Clone"
+                children: "Connect 4 Clone"
             }, void 0, false, {
                 fileName: "src/App.tsx",
                 lineNumber: 67,
