@@ -16115,33 +16115,48 @@ var _gameBoard = require("./components/GameBoard");
 var _gameBoardDefault = parcelHelpers.interopDefault(_gameBoard);
 var _useGameBoard = require("./hooks/useGameBoard");
 var _useGameBoardDefault = parcelHelpers.interopDefault(_useGameBoard);
-var _gameHelper = require("./game/gameHelper");
-var _gameHelperDefault = parcelHelpers.interopDefault(_gameHelper);
 var _constants = require("./constants");
 var _appCss = require("./App.css");
 var _s = $RefreshSig$();
 function App() {
     _s();
     const [playerTurn, setPlayerTurn] = (0, _react.useState)("1");
-    const [winner, setWinner] = (0, _react.useState)(null);
-    const { board, findDropSlotInCol, dropPieceInCol, resetBoard } = (0, _useGameBoardDefault.default)({
-        disableMoves: !!winner
+    const [outcome, setOutcome] = (0, _react.useState)(null);
+    const { board, colTopSlots, dropPieceInCol, resetBoard } = (0, _useGameBoardDefault.default)({
+        setGameOutcome: setOutcome
     });
-    const message = winner ? `Player ${winner} wins!` : `Player ${playerTurn}'s turn`;
+    const winner = outcome && outcome !== "draw" ? outcome : null;
+    const gameOver = outcome !== null;
+    // Determine if game is a draw, which can be done as an effect from playing a piece
+    // (Whereas it's inefficient to calculate if there's a winner this way)
+    (0, _react.useEffect)(()=>{
+        const isDraw = colTopSlots.every((slot)=>slot === -1) && !winner;
+        if (isDraw) setOutcome("draw");
+    }, [
+        colTopSlots,
+        winner
+    ]);
+    const message = ()=>{
+        switch(outcome){
+            case "1":
+            case "2":
+                return `Player ${outcome} wins!`;
+            case "draw":
+                return "Game is a draw!";
+            case null:
+            default:
+                return `Player ${playerTurn}'s turn`;
+        }
+    };
     const handleDropPiece = (col)=>{
-        const newBoard = dropPieceInCol(playerTurn, col);
-        if (newBoard === null) return;
-        const winnerPlayer = (0, _gameHelperDefault.default).determineWinner(newBoard, {
-            player: playerTurn,
-            col
-        });
-        if (winnerPlayer) setWinner(winnerPlayer);
-        else setTimeout(()=>setPlayerTurn((prev)=>prev === "1" ? "2" : "1"), (0, _constants.turnTransitionTime));
+        if (gameOver) return;
+        const pieceDropped = dropPieceInCol(playerTurn, col);
+        if (pieceDropped) setTimeout(()=>setPlayerTurn((prev)=>prev === "1" ? "2" : "1"), (0, _constants.turnTransitionTime));
     };
     const resetGame = ()=>{
         resetBoard();
         setPlayerTurn("1");
-        setWinner(null);
+        setOutcome(null);
     };
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         className: "container",
@@ -16149,45 +16164,45 @@ function App() {
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _pieceDropAreaDefault.default), {
                 playerTurn: playerTurn,
                 handleDropPiece: handleDropPiece,
-                findDropSlotInCol: findDropSlotInCol,
-                winner: winner
+                colTopSlots: colTopSlots,
+                isGameOver: gameOver
             }, void 0, false, {
                 fileName: "src/App.tsx",
-                lineNumber: 53,
+                lineNumber: 67,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _gameBoardDefault.default), {
                 board: board
             }, void 0, false, {
                 fileName: "src/App.tsx",
-                lineNumber: 59,
+                lineNumber: 73,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
                 className: `game-message${winner ? " game-message__winner" : ""}`,
-                children: message
+                children: message()
             }, void 0, false, {
                 fileName: "src/App.tsx",
-                lineNumber: 60,
+                lineNumber: 74,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-                className: "reset-button",
+                className: `reset-button${outcome ? " reset-button__new-game" : ""}`,
                 onClick: resetGame,
-                children: "Reset"
+                children: outcome ? "New Game" : "Reset"
             }, void 0, false, {
                 fileName: "src/App.tsx",
-                lineNumber: 63,
+                lineNumber: 77,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "src/App.tsx",
-        lineNumber: 52,
+        lineNumber: 66,
         columnNumber: 5
     }, this);
 }
-_s(App, "muLHaSD1zfbApZ5CwOOKQfVodig=", false, function() {
+_s(App, "VzajaAesr+3iub9ggkhseFjMkCY=", false, function() {
     return [
         (0, _useGameBoardDefault.default)
     ];
@@ -16201,7 +16216,7 @@ $RefreshReg$(_c, "App");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","./App.css":"6n0o6","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react":"jMk1U","./hooks/useGameBoard":"0bAbJ","./components/PieceDropArea":"2vIpZ","./game/gameHelper":"k8Gba","./components/GameBoard":"2SRpY","./constants":"3PFhw"}],"6n0o6":[function() {},{}],"jnFvT":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","./App.css":"6n0o6","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react":"jMk1U","./hooks/useGameBoard":"0bAbJ","./components/PieceDropArea":"2vIpZ","./components/GameBoard":"2SRpY","./constants":"3PFhw"}],"6n0o6":[function() {},{}],"jnFvT":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -18521,8 +18536,15 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _react = require("react");
 var _constants = require("../constants");
-const useGameBoard = ({ initialBoard, disableMoves = false })=>{
-    const [board, setBoard] = (0, _react.useState)(initialBoard || emptyBoard());
+var _gameHelper = require("../game/gameHelper");
+var _gameHelperDefault = parcelHelpers.interopDefault(_gameHelper);
+const useGameBoard = ({ setGameOutcome })=>{
+    const [board, setBoard] = (0, _react.useState)(emptyBoard());
+    const colTopSlots = (0, _react.useMemo)(()=>{
+        return board.map((column)=>column.findLastIndex((slot)=>slot === ''));
+    }, [
+        board
+    ]);
     function emptyBoard() {
         return new Array((0, _constants.BOARD_NUM_COLS)).fill(null).map(()=>new Array((0, _constants.BOARD_NUM_ROWS)).fill(""));
     }
@@ -18532,22 +18554,24 @@ const useGameBoard = ({ initialBoard, disableMoves = false })=>{
     // Drop a piece on the board if valid
     // Return board after making the play
     function dropPieceInCol(player, col) {
-        if (disableMoves) return null;
-        const slot = findDropSlotInCol(col);
-        if (slot === -1) return null;
+        const slot = colTopSlots[col];
+        if (slot === -1) return false;
+        const play = {
+            player,
+            col,
+            slot
+        };
         const newBoard = structuredClone(board);
         newBoard[col][slot] = player;
         setBoard(newBoard);
-        return newBoard;
-    }
-    function findDropSlotInCol(col) {
-        const dropSlot = board[col].findLastIndex((slot)=>slot === "");
-        return dropSlot;
+        const winner = (0, _gameHelperDefault.default).determineWinner(newBoard, play);
+        if (winner) setGameOutcome(player);
+        return true;
     }
     return {
         board,
+        colTopSlots,
         dropPieceInCol,
-        findDropSlotInCol,
         resetBoard
     };
 };
@@ -18558,7 +18582,7 @@ exports.default = useGameBoard;
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"jMk1U","../constants":"3PFhw","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"3PFhw":[function(require,module,exports,__globalThis) {
+},{"react":"jMk1U","../constants":"3PFhw","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../game/gameHelper":"k8Gba"}],"3PFhw":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BOARD_NUM_ROWS", ()=>BOARD_NUM_ROWS);
@@ -18568,125 +18592,7 @@ const BOARD_NUM_ROWS = 6;
 const BOARD_NUM_COLS = 7;
 const turnTransitionTime = 700; // ms
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2vIpZ":[function(require,module,exports,__globalThis) {
-var $parcel$ReactRefreshHelpers$3829 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-$parcel$ReactRefreshHelpers$3829.init();
-var prevRefreshReg = globalThis.$RefreshReg$;
-var prevRefreshSig = globalThis.$RefreshSig$;
-$parcel$ReactRefreshHelpers$3829.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-var _react = require("react");
-var _gameBoardSlot = require("./GameBoardSlot");
-var _gameBoardSlotDefault = parcelHelpers.interopDefault(_gameBoardSlot);
-var _constants = require("../constants");
-var _s = $RefreshSig$();
-const spaces = new Array((0, _constants.BOARD_NUM_COLS)).fill(null);
-const PieceDropArea = ({ handleDropPiece, findDropSlotInCol, playerTurn, winner })=>{
-    _s();
-    const [dropping, setDropping] = (0, _react.useState)(false);
-    const onDropPiece = (col)=>{
-        if (dropping) return;
-        setDropping(true);
-        setTimeout(()=>setDropping(false), (0, _constants.turnTransitionTime));
-        handleDropPiece(col);
-    };
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "drop-area",
-        children: spaces.map((_, col)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                onClick: ()=>onDropPiece(col),
-                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _gameBoardSlotDefault.default), {
-                    player: playerTurn,
-                    slot: 1,
-                    disabled: !!winner || dropping || findDropSlotInCol(col) === -1,
-                    inDropArea: true
-                }, `drop-area-${playerTurn}-${col}`, false, {
-                    fileName: "src/components/PieceDropArea.tsx",
-                    lineNumber: 33,
-                    columnNumber: 11
-                }, undefined)
-            }, col, false, {
-                fileName: "src/components/PieceDropArea.tsx",
-                lineNumber: 32,
-                columnNumber: 9
-            }, undefined))
-    }, void 0, false, {
-        fileName: "src/components/PieceDropArea.tsx",
-        lineNumber: 30,
-        columnNumber: 5
-    }, undefined);
-};
-_s(PieceDropArea, "A8CR0+UluETIc8gu7F/op9ehzRQ=");
-_c = PieceDropArea;
-exports.default = PieceDropArea;
-var _c;
-$RefreshReg$(_c, "PieceDropArea");
-
-  $parcel$ReactRefreshHelpers$3829.postlude(module);
-} finally {
-  globalThis.$RefreshReg$ = prevRefreshReg;
-  globalThis.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./GameBoardSlot":"3PEFw","../constants":"3PFhw","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"3PEFw":[function(require,module,exports,__globalThis) {
-var $parcel$ReactRefreshHelpers$08b9 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-$parcel$ReactRefreshHelpers$08b9.init();
-var prevRefreshReg = globalThis.$RefreshReg$;
-var prevRefreshSig = globalThis.$RefreshSig$;
-$parcel$ReactRefreshHelpers$08b9.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-function GameBoardSlot({ player, slot, inDropArea = false, disabled = false }) {
-    const getClasses = ()=>{
-        const classes = [
-            "game-piece",
-            `game-piece-${slot + 1}`
-        ];
-        if (player) classes.push(player === "1" ? "game-piece__red" : "game-piece__yellow");
-        return classes.join(" ");
-    };
-    const renderPiece = ()=>{
-        return inDropArea ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-            disabled: disabled,
-            className: getClasses(),
-            children: !disabled && '\u2193'
-        }, void 0, false, {
-            fileName: "src/components/GameBoardSlot.tsx",
-            lineNumber: 25,
-            columnNumber: 7
-        }, this) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-            className: getClasses()
-        }, void 0, false, {
-            fileName: "src/components/GameBoardSlot.tsx",
-            lineNumber: 27,
-            columnNumber: 7
-        }, this);
-    };
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "connect-four-grid__slot",
-        children: player && renderPiece()
-    }, void 0, false, {
-        fileName: "src/components/GameBoardSlot.tsx",
-        lineNumber: 32,
-        columnNumber: 5
-    }, this);
-}
-_c = GameBoardSlot;
-exports.default = GameBoardSlot;
-var _c;
-$RefreshReg$(_c, "GameBoardSlot");
-
-  $parcel$ReactRefreshHelpers$08b9.postlude(module);
-} finally {
-  globalThis.$RefreshReg$ = prevRefreshReg;
-  globalThis.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"k8Gba":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"k8Gba":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _constants = require("../constants");
@@ -18776,7 +18682,125 @@ class GameHelper {
 }
 exports.default = GameHelper;
 
-},{"../constants":"3PFhw","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2SRpY":[function(require,module,exports,__globalThis) {
+},{"../constants":"3PFhw","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2vIpZ":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$3829 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$3829.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$3829.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _gameBoardSlot = require("./GameBoardSlot");
+var _gameBoardSlotDefault = parcelHelpers.interopDefault(_gameBoardSlot);
+var _constants = require("../constants");
+var _s = $RefreshSig$();
+const spaces = new Array((0, _constants.BOARD_NUM_COLS)).fill(null);
+const PieceDropArea = ({ handleDropPiece, colTopSlots, playerTurn, isGameOver })=>{
+    _s();
+    const [dropping, setDropping] = (0, _react.useState)(false);
+    const onDropPiece = (col)=>{
+        if (dropping) return;
+        setDropping(true);
+        setTimeout(()=>setDropping(false), (0, _constants.turnTransitionTime));
+        handleDropPiece(col);
+    };
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "drop-area",
+        children: spaces.map((_, col)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                onClick: ()=>onDropPiece(col),
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _gameBoardSlotDefault.default), {
+                    player: playerTurn,
+                    slot: 1,
+                    disabled: isGameOver || dropping || colTopSlots[col] === -1,
+                    inDropArea: true
+                }, `drop-area-${playerTurn}-${col}`, false, {
+                    fileName: "src/components/PieceDropArea.tsx",
+                    lineNumber: 33,
+                    columnNumber: 11
+                }, undefined)
+            }, col, false, {
+                fileName: "src/components/PieceDropArea.tsx",
+                lineNumber: 32,
+                columnNumber: 9
+            }, undefined))
+    }, void 0, false, {
+        fileName: "src/components/PieceDropArea.tsx",
+        lineNumber: 30,
+        columnNumber: 5
+    }, undefined);
+};
+_s(PieceDropArea, "A8CR0+UluETIc8gu7F/op9ehzRQ=");
+_c = PieceDropArea;
+exports.default = PieceDropArea;
+var _c;
+$RefreshReg$(_c, "PieceDropArea");
+
+  $parcel$ReactRefreshHelpers$3829.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./GameBoardSlot":"3PEFw","../constants":"3PFhw","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"3PEFw":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$08b9 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$08b9.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$08b9.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+function GameBoardSlot({ player, slot, inDropArea = false, disabled = false }) {
+    const getClasses = ()=>{
+        const classes = [
+            "game-piece",
+            `game-piece-${slot + 1}`
+        ];
+        if (player) classes.push(player === "1" ? "game-piece__red" : "game-piece__yellow");
+        return classes.join(" ");
+    };
+    const renderPiece = ()=>{
+        return inDropArea ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+            disabled: disabled,
+            className: getClasses(),
+            children: !disabled && '\u2193'
+        }, void 0, false, {
+            fileName: "src/components/GameBoardSlot.tsx",
+            lineNumber: 25,
+            columnNumber: 7
+        }, this) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+            className: getClasses()
+        }, void 0, false, {
+            fileName: "src/components/GameBoardSlot.tsx",
+            lineNumber: 27,
+            columnNumber: 7
+        }, this);
+    };
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "connect-four-grid__slot",
+        children: player && renderPiece()
+    }, void 0, false, {
+        fileName: "src/components/GameBoardSlot.tsx",
+        lineNumber: 32,
+        columnNumber: 5
+    }, this);
+}
+_c = GameBoardSlot;
+exports.default = GameBoardSlot;
+var _c;
+$RefreshReg$(_c, "GameBoardSlot");
+
+  $parcel$ReactRefreshHelpers$08b9.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"2SRpY":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$dc65 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$dc65.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
