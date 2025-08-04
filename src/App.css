@@ -28,6 +28,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 10px 0;
 }
 
 .connect-four-grid {
@@ -135,9 +136,9 @@ body {
 
 .game-message {
   font-weight: 300;
-  font-size: 24px;
+  font-size: 22px;
   letter-spacing: 1px;
-  margin: 16px 0;
+  margin: 22px 0;
 }
 
 .game-message__winner {
@@ -159,13 +160,21 @@ body {
 
 .reset-button__new-game {
   background-color: var(--color-board-blue);
-  font-size: 15px;
+  font-size: 16px;
   color: white;
-  padding: 8px 20px;
+  padding: 12px 25px;
+  text-transform: uppercase;
 }
 
 .reset-button__new-game:hover {
   animation: scale-bounce .7s ease infinite;
+}
+
+.heading-primary {
+  font-size: 32px;
+  font-weight: 300;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
 }
 
 @keyframes piece-drop-slot-6 {
