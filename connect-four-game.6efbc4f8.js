@@ -16161,6 +16161,14 @@ function App() {
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         className: "container",
         children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
+                className: "heading-primary",
+                children: "Connect Four Clone"
+            }, void 0, false, {
+                fileName: "src/App.tsx",
+                lineNumber: 67,
+                columnNumber: 7
+            }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _pieceDropAreaDefault.default), {
                 playerTurn: playerTurn,
                 handleDropPiece: handleDropPiece,
@@ -16168,14 +16176,14 @@ function App() {
                 isGameOver: gameOver
             }, void 0, false, {
                 fileName: "src/App.tsx",
-                lineNumber: 67,
+                lineNumber: 68,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _gameBoardDefault.default), {
                 board: board
             }, void 0, false, {
                 fileName: "src/App.tsx",
-                lineNumber: 73,
+                lineNumber: 74,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
@@ -16183,7 +16191,7 @@ function App() {
                 children: message()
             }, void 0, false, {
                 fileName: "src/App.tsx",
-                lineNumber: 74,
+                lineNumber: 75,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -16192,7 +16200,7 @@ function App() {
                 children: outcome ? "New Game" : "Reset"
             }, void 0, false, {
                 fileName: "src/App.tsx",
-                lineNumber: 77,
+                lineNumber: 78,
                 columnNumber: 7
             }, this)
         ]
