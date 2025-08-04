@@ -64,7 +64,7 @@ export function App() {
 
   return (
     <div className="container">
-      <h1 className="heading-primary">Connect Four Clone</h1>
+      <h1 className="heading-primary">Connect 4 Clone</h1>
       <PieceDropArea
         playerTurn={playerTurn}
         handleDropPiece={handleDropPiece}
