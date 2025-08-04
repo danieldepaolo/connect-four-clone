@@ -1,4 +1,4 @@
-import { DropColumn, Player } from "../types";
+import { Player } from "../types";
 
 function GameBoardSlot({
   player,

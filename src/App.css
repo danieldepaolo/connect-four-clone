@@ -7,6 +7,8 @@
 
   --piece-size: 50px;
 
+  --timing-function-fall: cubic-bezier(0.33333, 0, 0.66667, 0.33333);
+
   @media screen and (max-width: 500px) {
     --piece-size: 42px;
   }
@@ -39,22 +41,22 @@ body {
 }
 
 .connect-four-grid .game-piece-6 {
-  animation: piece-drop-slot-6 .5s ease-in-out;
+  animation: piece-drop-slot-6 .5s var(--timing-function-fall);
 }
 .connect-four-grid .game-piece-5 {
-  animation: piece-drop-slot-5 .4s ease-in-out;
+  animation: piece-drop-slot-5 .4s var(--timing-function-fall);
 }
 .connect-four-grid .game-piece-4 {
-  animation: piece-drop-slot-4 .4s ease-in-out;
+  animation: piece-drop-slot-4 .4s var(--timing-function-fall);
 }
 .connect-four-grid .game-piece-3 {
-  animation: piece-drop-slot-3 .3s ease-in-out;
+  animation: piece-drop-slot-3 .3s var(--timing-function-fall);
 }
 .connect-four-grid .game-piece-2 {
-  animation: piece-drop-slot-2 .3s ease-in-out;
+  animation: piece-drop-slot-2 .3s var(--timing-function-fall);
 }
 .connect-four-grid .game-piece-1 {
-  animation: piece-drop-slot-1 .2s ease-in-out;
+  animation: piece-drop-slot-1 .2s var(--timing-function-fall);
 }
 
 .connect-four-grid__slot,
@@ -160,12 +162,12 @@ body {
     transform: translateY(calc(var(--piece-size) * -7.3));
   }
 
-  90% {
+  88% {
     transform: translateY(0);
   }
 
-  95% {
-    transform: translateY(-6px);
+  94% {
+    transform: translateY(-5px);
   }
 
   100% {
@@ -183,7 +185,7 @@ body {
   }
 
   95% {
-    transform: translateY(-6px);
+    transform: translateY(-5px);
   }
 
   100% {
@@ -201,7 +203,7 @@ body {
   }
 
   95% {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
   }
 
   100% {

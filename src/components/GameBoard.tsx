@@ -1,6 +1,6 @@
 import GameBoardSlot from "./GameBoardSlot";
 
-import { GameBoard as GameBoardType, Player } from "../types";
+import { GameBoard as GameBoardType } from "../types";
 
 interface GameBoardProps {
   board: GameBoardType;

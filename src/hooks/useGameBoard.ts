@@ -1,9 +1,24 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { BOARD_NUM_COLS, BOARD_NUM_ROWS } from "../constants";
-import { GameBoard, GameMove, Player } from "../types";
+import {
+  ColTopSlots,
+  GameBoard,
+  GameOutcome,
+  GamePlay,
+  Player,
+} from "../types";
+import GameHelper from "../game/gameHelper";
 
-const useGameBoard = ({ initialBoard, disableMoves = false }: { initialBoard?: GameBoard, disableMoves?: Boolean }) => {
-  const [board, setBoard] = useState(initialBoard || emptyBoard());
+const useGameBoard = ({
+  setGameOutcome,
+}: {
+  setGameOutcome: React.Dispatch<React.SetStateAction<GameOutcome>>;
+}) => {
+  const [board, setBoard] = useState<GameBoard>(emptyBoard());
+
+  const colTopSlots: ColTopSlots = useMemo(() => {
+    return board.map(column => column.findLastIndex(slot => slot === ''));
+  }, [board]);
 
   function emptyBoard() {
     return new Array(BOARD_NUM_COLS)
@@ -17,28 +32,35 @@ const useGameBoard = ({ initialBoard, disableMoves = false }: { initialBoard?: G
 
   // Drop a piece on the board if valid
   // Return board after making the play
-  function dropPieceInCol(player: Player, col: number): GameBoard | null {
-    if (disableMoves) return null;
-  
-    const slot = findDropSlotInCol(col);
-    if (slot === -1) return null;
+  function dropPieceInCol(player: Player, col: number): boolean {
+    const slot = colTopSlots[col];
+    if (slot === -1) {
+      return false;
+    }
+
+    const play: GamePlay = {
+      player,
+      col,
+      slot,
+    };
 
     const newBoard = structuredClone(board);
     newBoard[col][slot] = player;
     setBoard(newBoard);
 
-    return newBoard;
-  }
+    const winner = GameHelper.determineWinner(newBoard, play);
 
-  function findDropSlotInCol(col: number): number {
-    const dropSlot = board[col].findLastIndex((slot) => slot === "");
-    return dropSlot;
+    if (winner) {
+      setGameOutcome(player);
+    }
+
+    return true;
   }
 
   return {
     board,
+    colTopSlots,
     dropPieceInCol,
-    findDropSlotInCol,
     resetBoard,
   };
 };

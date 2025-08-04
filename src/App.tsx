@@ -1,51 +1,65 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import PieceDropArea from "./components/PieceDropArea";
 import GameBoard from "./components/GameBoard";
 
 import useGameBoard from "./hooks/useGameBoard";
-import { DropColumn, Player } from "./types";
-import GameHelper from "./game/gameHelper";
+import { GameOutcome, Player } from "./types";
 import { turnTransitionTime } from "./constants";
 
 import "./App.css";
 
 export function App() {
   const [playerTurn, setPlayerTurn] = useState<Player>("1");
-  const [winner, setWinner] = useState<Player | null>(null);
+  const [outcome, setOutcome] = useState<GameOutcome>(null);
 
-  const { board, findDropSlotInCol, dropPieceInCol, resetBoard } = useGameBoard(
-    {
-      disableMoves: !!winner,
+  const { board, colTopSlots, dropPieceInCol, resetBoard } = useGameBoard({
+    setGameOutcome: setOutcome,
+  });
+
+  const winner = outcome && outcome !== "draw" ? outcome : null;
+  const gameOver = outcome !== null;
+
+  // Determine if game is a draw, which can be done as an effect from playing a piece
+  // (Whereas it's inefficient to calculate if there's a winner this way)
+  useEffect(() => {
+    const isDraw = colTopSlots.every((slot) => slot === -1) && !winner;
+
+    if (isDraw) {
+      setOutcome("draw");
     }
-  );
+  }, [colTopSlots, winner]);
 
-  const message = winner
-    ? `Player ${winner} wins!`
-    : `Player ${playerTurn}'s turn`;
+  const message = () => {
+    switch (outcome) {
+      case "1":
+      case "2":
+        return `Player ${outcome} wins!`;
+      case "draw":
+        return "Game is a draw!";
+      case null:
+      default:
+        return `Player ${playerTurn}'s turn`;
+    }
+  };
 
   const handleDropPiece = (col: number) => {
-    const newBoard = dropPieceInCol(playerTurn, col);
-    if (newBoard === null) {
-      return;
-    }
+    if (gameOver) return;
 
-    const winnerPlayer = GameHelper.determineWinner(newBoard, {
-      player: playerTurn,
-      col,
-    });
+    const pieceDropped = dropPieceInCol(playerTurn, col);
 
-    if (winnerPlayer) {
-      setWinner(winnerPlayer);
-    } else {
-      setTimeout(() => setPlayerTurn((prev) => (prev === "1" ? "2" : "1")), turnTransitionTime);
+    if (pieceDropped) {
+      setTimeout(
+        () => setPlayerTurn((prev) => (prev === "1" ? "2" : "1")),
+        turnTransitionTime
+      );
     }
   };
 
   const resetGame = () => {
     resetBoard();
     setPlayerTurn("1");
-    setWinner(null);
+    setOutcome(null);
   };
 
   return (
@@ -53,12 +67,12 @@ export function App() {
       <PieceDropArea
         playerTurn={playerTurn}
         handleDropPiece={handleDropPiece}
-        findDropSlotInCol={findDropSlotInCol}
-        winner={winner}
+        colTopSlots={colTopSlots}
+        isGameOver={gameOver}
       />
       <GameBoard board={board} />
       <h2 className={`game-message${winner ? " game-message__winner" : ""}`}>
-        {message}
+        {message()}
       </h2>
       <button className="reset-button" onClick={resetGame}>
         Reset

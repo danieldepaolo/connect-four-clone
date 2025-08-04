@@ -3,18 +3,18 @@ import { useState } from "react";
 import GameBoardSlot from "./GameBoardSlot";
 
 import { BOARD_NUM_COLS, turnTransitionTime } from "../constants";
-import { Player } from "../types";
+import { ColTopSlots, GameWinner, Player } from "../types";
 
 interface PieceDropAreaProps {
-  handleDropPiece: (col: number) => void;
-  findDropSlotInCol: (col: number) => number;
-  playerTurn: Player;
-  winner: Player | null;
+  handleDropPiece: (col: number) => void
+  colTopSlots: ColTopSlots
+  playerTurn: Player
+  isGameOver: boolean
 }
 
 const spaces = new Array(BOARD_NUM_COLS).fill(null);
 
-const PieceDropArea = ({ handleDropPiece, findDropSlotInCol, playerTurn, winner }: PieceDropAreaProps) => {
+const PieceDropArea = ({ handleDropPiece, colTopSlots, playerTurn, isGameOver }: PieceDropAreaProps) => {
   const [dropping, setDropping] = useState<boolean>(false);
 
   const onDropPiece = (col: number) => {
@@ -34,7 +34,7 @@ const PieceDropArea = ({ handleDropPiece, findDropSlotInCol, playerTurn, winner 
             key={`drop-area-${playerTurn}-${col}`}
             player={playerTurn}
             slot={1}
-            disabled={!!winner || dropping || findDropSlotInCol(col) === -1}
+            disabled={isGameOver || dropping || colTopSlots[col] === -1}
             inDropArea
           />
         </div>

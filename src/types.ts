@@ -2,9 +2,14 @@ export type Player = '1' | '2';
 
 export type GameBoard = (Player | '')[][];
 
-export interface GameMove {
+export type GameWinner = Player | null;
+
+export type GameOutcome = GameWinner | 'draw';
+
+export interface GamePlay {
   player: Player;
   col: number;
+  slot: number;
 }
 
 export interface BoardPiecePosition {
@@ -13,6 +18,4 @@ export interface BoardPiecePosition {
   slot: number;
 }
 
-export type DropColumns = (Player | '')[];
-
-export type DropColumn = number | null;
+export type ColTopSlots = number[];

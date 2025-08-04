@@ -1,8 +1,8 @@
 import { BOARD_NUM_COLS, BOARD_NUM_ROWS } from "../constants";
-import { BoardPiecePosition, GameBoard, GameMove, Player } from "../types";
+import { BoardPiecePosition, ColTopSlots, GameBoard, GamePlay, GameWinner } from "../types";
 
 class GameHelper {
-  static determineWinner(board: GameBoard, lastMove: GameMove): Player | null {
+  static determineWinner(board: GameBoard, lastMove: GamePlay): GameWinner {
     const rowStreak = this.checkHorizontal(board, lastMove);
     const verticalStreak = this.checkVertical(board, lastMove);
     const diagonalStreak = this.checkDiagonals(board, lastMove);
@@ -30,7 +30,7 @@ class GameHelper {
     };
   }
 
-  static checkDiagonals(board: GameBoard, move: GameMove) {
+  static checkDiagonals(board: GameBoard, move: GamePlay) {
     const { col, player: playerTurn } = move;
     const { slot } = this.topPieceInCol(board, col)!;
 
@@ -82,7 +82,7 @@ class GameHelper {
     return streak;
   }
 
-  static checkHorizontal(board: GameBoard, move: GameMove) {
+  static checkHorizontal(board: GameBoard, move: GamePlay) {
     const { col, player: playerTurn } = move;
     const { slot } = this.topPieceInCol(board, col)!;
 
@@ -105,7 +105,7 @@ class GameHelper {
     return streak;
   }
 
-  static checkVertical(board: GameBoard, move: GameMove) {
+  static checkVertical(board: GameBoard, move: GamePlay) {
     const { col, player: playerTurn } = move;
     const { slot } = this.topPieceInCol(board, col)!;
 
