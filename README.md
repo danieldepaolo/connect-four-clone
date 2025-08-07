@@ -3,6 +3,8 @@ Simply the game of Connect 4.
 
 [Live site](https://danieldepaolo.github.io/connect-four-clone/)
 
+<img width="859" height="734" alt="connect-4" src="https://github.com/user-attachments/assets/3392d567-cc66-4bee-b2de-1e3afdc11b52" />
+
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
